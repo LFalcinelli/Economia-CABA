@@ -275,7 +275,7 @@ function lineChart(el, o) {
     items.forEach((it, i) => { if (i === 0) it.y = Math.min(it.y, h - 18); else if (items[i - 1].y - it.y < gap) it.y = items[i - 1].y - gap; });
     items.forEach(it => {
       const xx = x(it.p.d), role = roleAt(it.s, it.p.d), sw = widthOf(it.s);
-      g.append("circle").attr("class", `mk s-${role}`).attr("cx", xx).attr("cy", y(it.p.v)).attr("r", sw + 2.6).attr("stroke-width", sw * .8);
+      if (o.endDot !== false) g.append("circle").attr("class", `mk s-${role}`).attr("cx", xx).attr("cy", y(it.p.v)).attr("r", sw + 2.6).attr("stroke-width", sw * .8);
       const t = g.append("text").attr("class", "lbl").attr("x", xx + 12).attr("y", it.y);
       t.append("tspan").attr("x", xx + 12).attr("dy", it.s.endName === false ? "0.34em" : "-0.15em").attr("class", `t-${role} lbl-big`).text((o.endFmt || o.y.fmt)(it.p.v));
       if (it.s.endName !== false) t.append("tspan").attr("x", xx + 12).attr("dy", "1.3em").attr("class", "lbl-m").text((narrow && it.s.endShort) || it.s.endName || it.s.name);
@@ -423,4 +423,3 @@ function treemapChart(el, o) {
     showTip(tip, el, `<span class="th">${d.data.label}</span><span class="tr">Participación<b>${pc1(d.data.v)}</b></span>${d.data.n ? `<span class="tr mut">${f0(d.data.n)} personas</span>` : ""}${d.data.note ? `<span class="tr mut">${d.data.note}</span>` : ""}`, ev.clientX - r.left, ev.clientY - r.top);
   }).on("pointerleave", () => { svg.selectAll("g.tm").classed("dim-t", false); hideTip(tip); });
 }
-

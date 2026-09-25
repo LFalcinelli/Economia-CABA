@@ -3,10 +3,10 @@
 
 /* ============ datos ============ */
 const D = {
-  m2: [[2014,582708],[2015,508219],[2016,381381],[2017,400419],[2018,339582],[2019,386052],[2020,286617],[2021,319909],[2022,229040],[2023,138590],[2024,580538],[2025,706920],[2026,783733]],
+  m2: [[2014,101579],[2015,112072],[2016,63478],[2017,66752],[2018,57360],[2019,61308],[2020,54951],[2021,60516],[2022,38211],[2023,20532],[2024,95646],[2025,126340],[2026,152009]],
   usd: [["2022","I",18],["2022","II",17],["2022","III",23],["2022","IV",24],["2023","I",34],["2023","II",51],["2023","III",67],["2023","IV",29],["2024","I",31],["2024","II",25],["2024","III",29],["2024","IV",21],["2025","I",23],["2025","II",20],["2025","III",23],["2025","IV",25],["2026","I",28]],
   hipProv: [["CABA",46.3],["Chubut",19.4],["Neuquén",16.5],["Tierra del Fuego",15.7],["Mendoza",13],["Córdoba",11.5],["Río Negro",11.4],["Santa Fe",11.1],["Buenos Aires",10.4],["Santa Cruz",9.1],["La Pampa",8.2],["Entre Ríos",6.3],["San Juan",6.1],["San Luis",5.4],["Tucumán",4.8],["Salta",4.5],["Corrientes",3.1],["La Rioja",2.1],["Jujuy",2.1],["Catamarca",2],["Chaco",1.8],["Misiones",1.3],["Santiago del Estero",0.9],["Formosa",0.8]],
-  escr: [[2010,16504],[2011,17247],[2012,14616],[2013,9227],[2014,8930],[2015,8963],[2016,10302],[2017,14993],[2018,20587],[2019,9682],[2020,4215],[2021,7904],[2022,7870],[2023,9210],[2024,11130],[2025,18156],[2026,18052]],
+  escr: [[2010,38294],[2011,39860],[2012,31834],[2013,21450],[2014,20861],[2015,22484],[2016,25394],[2017,36599],[2018,40028],[2019,21713],[2020,8478],[2021,17219],[2022,19996],[2023,23398],[2024,30204],[2025,42549],[2026,41583]],
   pob: [["CABA",-55],["Gran Tucumán",-46],["Santiago del Estero",-44],["Río Cuarto",-44],["Gran Córdoba",-40],["Formosa",-39],["Mar del Plata",-39],["Gran Rosario",-38],["Río Gallegos",-38],["Gran Santa Fe",-37],["Bahía Blanca",-35],["Gran Mendoza",-31],["Gran La Plata",-27],["Rawson – Trelew",-27],["Partidos del GBA",-27],["Neuquén – Plottier",-26],["Ushuaia – Río Grande",-12]],
   ind: [["Río Cuarto",-70],["Santiago del Estero",-69],["Formosa",-69],["Gran Tucumán",-68],["Neuquén – Plottier",-64],["Gran Rosario",-63],["Gran Mendoza",-60],["Mar del Plata",-56],["Gran Córdoba",-51],["Rawson – Trelew",-50],["Partidos del GBA",-43],["Gran La Plata",-42],["CABA",-41],["Gran Santa Fe",-38],["Río Gallegos",0],["Ushuaia – Río Grande",5],["Bahía Blanca",25]],
   delitos: [["Robos",-19,-21],["Hurtos",-15,-19],["Homicidios dolosos",-18,-14],["Muertes en siniestros viales",-10,-12]],
@@ -18,7 +18,7 @@ const D = {
   food: [["Azúcar y dulces",-46],["Frutas y verduras",-28],["Otros alimentos",-16],["Bebidas",-15],["Cereales y legumbres",-8],["Leche, yogur y lácteos",-1],["Aceites y grasas",1],["Carnes y huevos",6],["Expensas",25]],
   calle: [["2017-11",636,966],["2018-05",662,1091],["2018-11",858,1260],["2019-05",870,1146],["2019-11",833,901],["2021-05",1605,968],["2022-05",1600,1011],["2023-05",2268,1243],["2023-11",2108,1178],["2024-05",2235,1325],["2024-11",2813,1236],["2025-05",2948,1574],["2025-11",3546,1613]],
   cities: [["CABA",4274],["Seúl",3400],["Barcelona",2500],["San Pablo",2300],["Madrid",2300],["Ciudad de México",2000]],
-  /* Entender la Ciudad · planilla de coyuntura (hoja 15 bis) y publicaciones IDECBA */
+  /* Entender la Ciudad · series de producción, empleo e ingresos publicadas por IDECBA */
   pgb: [[2004,91224],[2005,100824],[2006,112414],[2007,121983],[2008,127107],[2009,127005],[2010,136078],[2011,144205],[2012,146478],[2013,148654],[2014,146338],[2015,149805],[2016,146422],[2017,150659],[2018,149767],[2019,145961],[2020,130515],[2021,143880],[2022,152674],[2023,155183],[2024,146559],[2025,153023]],
   sect: [["Intermediación financiera (13,5%)",12.2],["Agro, pesca y minería (1,9%)",6.2],["Servicios sociales y de salud (7,2%)",2.8],["Enseñanza (2,8%)",1.5],["Inmobiliarios y empresariales (20,1%)",-1.4],["Transporte y comunicaciones (9,0%)",-1.8],["Servicios comunitarios y personales (4,0%)",-1.8],["Administración pública (5,5%)",-2.0],["Electricidad, gas y agua (0,7%)",-2.9],["Comercio (15,0%)",-4.5],["Servicio doméstico (0,8%)",-4.8],["Hoteles y restaurantes (3,3%)",-6.0],["Industria manufacturera (12,5%)",-7.7],["Construcción (3,7%)",-13.4]],
   desoc: [["II trim. 2023",6.8],["II trim. 2025",7.7],["II trim. 2026",7.2]],

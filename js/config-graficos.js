@@ -7,12 +7,11 @@ const CABA_M = [6.2,5.6,7.0,5.8,5.8, 7.3,6.0,7.1,7.8,7.5,7.1,7.3,10.8,12.0,9.4,1
 const NAC_M = [7.0,6.2,6.3,4.9,5.1, 6.0,6.6,7.7,8.4,7.8,6.0,6.3,12.4,12.7,8.3,12.8,25.5, 20.6,13.2,11.0,8.8,4.2,4.6,4.0,4.2,3.5,2.7,2.4,2.7, 2.2,2.4,3.7,2.8,1.5,1.6,1.9,1.9,2.1,2.3,2.5,2.9, 2.9,2.9,3.4,2.6,2.1,1.9,2.1,1.7];
 const monthsFrom = (y, m, n) => Array.from({length: n}, (_, i) => { const d = new Date(y, m - 1 + i, 1); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0"); });
 SER.infl = monthsFrom(2022, 8, CABA_M.length).map((k, i) => [k, CABA_M[i], NAC_M[i]]);
-// Riesgo país: documento de trabajo hasta may-2023; planilla de coyuntura (fin de mes) desde jun-2023
+// Riesgo país: serie mensual del índice EMBI Argentina.
 const RP_PL = {"2023-06":2037,"2023-07":1980,"2023-08":2105,"2023-09":2543,"2023-10":2577,"2023-11":1982,"2023-12":1906,"2024-01":1950,"2024-02":1705,"2024-03":1439,"2024-04":1216,"2024-05":1312,"2024-06":1456,"2024-07":1507,"2024-08":1433,"2024-09":1290,"2024-10":984,"2024-11":752,"2024-12":635,"2025-01":618,"2025-02":780,"2025-03":816,"2025-04":726,"2025-05":663,"2025-06":701,"2025-07":730,"2025-08":829,"2025-09":1222,"2025-10":657,"2025-11":648,"2025-12":571,"2026-01":496,"2026-02":572,"2026-03":617,"2026-04":567,"2026-05":493,"2026-06":435,"2026-07":420,"2026-08":420,"2026-09":556};
 SER.rp = SER.rp.filter(r => r[0] < "2023-06").concat(Object.entries(RP_PL));
 // Alquiler de 2 ambientes, llevado a pesos de agosto de 2026 (IPCBA jul 2,9% y ago 1,7%)
-const K_AGO = 1.029 * 1.017;
-SER.alqAgo = SER.alq.map(([k, v]) => [k, v * K_AGO]);
+SER.alqAgo = [["2022-08",973787],["2022-09",966657],["2022-10",928173],["2022-11",953775],["2022-12",950080],["2023-01",944341],["2023-02",952541],["2023-03",1008472],["2023-04",1056644],["2023-05",1096821],["2023-06",1171338],["2023-07",1214725],["2023-08",1395075],["2023-09",1357859],["2023-10",1469257],["2023-11",1453493],["2023-12",1318724],["2024-01",1128933],["2024-02",1021621],["2024-03",927076],["2024-04",862132],["2024-05",849445],["2024-06",835122],["2024-07",822400],["2024-08",829325],["2024-09",827304],["2024-10",828151],["2024-11",819073],["2024-12",810947],["2025-01",817064],["2025-02",840519],["2025-03",820580],["2025-04",830148],["2025-05",839230],["2025-06",837146],["2025-07",827706],["2025-08",836536],["2025-09",837066],["2025-10",835178],["2025-11",820266],["2025-12",824020],["2026-01",824717],["2026-02",827238],["2026-03",839367],["2026-04",824606],["2026-05",821072],["2026-06",819982],["2026-07",809755],["2026-08",811651]];
 const BRECHA = {"2023-01":94.8,"2023-02":89.7,"2023-03":81.9,"2023-04":89.8,"2023-05":99.3,"2023-06":87.9,"2023-07":85.6,"2023-08":102.4,"2023-09":101.7,"2023-10":156.8,"2023-11":171.3,"2023-12":61.3,"2024-01":33.9,"2024-02":26.1,"2024-03":13.7,"2024-04":11.8,"2024-05":22.5,"2024-06":37.6,"2024-07":48.8,"2024-08":38.1,"2024-09":26.9,"2024-10":19.2,"2024-11":10.3,"2024-12":7.7,"2025-01":14.7,"2025-02":12.5,"2025-03":14.8,"2025-04":10.6,"2025-05":0.1,"2025-06":-0.6,"2025-07":0.5,"2025-08":-0.4,"2025-09":-0.2,"2025-10":0.4,"2025-11":-1.2,"2025-12":0.3,"2026-01":2.1,"2026-02":0.3,"2026-03":0.1,"2026-04":0.1,"2026-05":0.0,"2026-06":-0.6};
 
 const gov = y => y < 2003 ? "o" : y <= 2015 ? "k" : y <= 2019 ? "m" : y <= 2023 ? "k" : "l";
@@ -30,10 +29,10 @@ const semD = k => { const [y, s] = k.split("-"); return y + (s === "1" ? "-04" :
 const semLab = d => (d.getMonth() < 6 ? "1er" : "2do") + " semestre de " + d.getFullYear();
 
 const CIRCUIT = [
-  {t: "Previsibilidad", k: "Condición de entrada", p: "Con déficit cero y sin emisión para financiar al Tesoro, la inflación baja y el dólar deja de tener varios precios. La brecha entre el dólar libre y el oficial pasó de 171% en noviembre de 2023 a cero.", c: "circ0", src: "Brecha entre el dólar blue y el oficial mayorista, promedio mensual. Planilla de coyuntura, sobre BCRA y Ámbito."},
-  {t: "Ahorro", k: "Mecanismo", p: "Cuando la moneda deja de perder valor, el ahorro vuelve a los bancos. Los depósitos privados en dólares casi se triplicaron desde diciembre de 2023: el dólar del colchón volvió al sistema.", c: "circ1", src: "Depósitos del sector privado, en miles de millones de dólares; los depósitos en pesos, convertidos a dólares. BCRA, vía <a href=\"https://www.infobae.com/economia/2026/08/24/los-depositos-en-dolares-crecieron-10-veces-mas-que-en-pesos-que-puede-pasar-con-el-credito-segun-un-informe-privado/\" target=\"_blank\" rel=\"noopener\">Infobae</a>."},
-  {t: "Crédito", k: "Mecanismo", p: "Los depósitos se convierten en préstamos a plazos largos. Los bancos prestan el doble de lo que captan que a comienzos de 2024, y la hipoteca volvió a existir.", c: "circ2", src: "Préstamos sobre depósitos: BCRA, vía <a href=\"https://dolarhoy.com/economia/credito-al-sector-privado-alcanza-maximo-en-ocho-anos-pese-a-aumento-de-morosidad-2026528113426\" target=\"_blank\" rel=\"noopener\">Dolarhoy</a>. Compraventas con hipoteca: Colegio de Escribanos de la Ciudad."},
-  {t: "Inversión", k: "Mecanismo", p: "Con crédito y reglas estables se decide invertir. El Régimen de Incentivo para Grandes Inversiones ya aprobó 20 proyectos en nueve provincias. La Ciudad no tiene ninguno: su economía de servicios necesita su propia baja de impuestos.", c: "circ3", src: "Inversión comprometida en proyectos RIGI aprobados, en millones de dólares, por provincia. <a href=\"https://www.infobae.com/economia/2026/07/11/el-mapa-del-rigi-como-avanzan-las-20-iniciativas-que-comprometieron-usd-57000-millones-en-inversiones-y-prometen-100000-empleos/\" target=\"_blank\" rel=\"noopener\">Infobae, julio de 2026</a>. Proyectos y montos oficiales: <a href=\"https://www.argentina.gob.ar/economia/rigi\" target=\"_blank\" rel=\"noopener\">web del RIGI, Ministerio de Economía</a>."},
+  {t: "Previsibilidad", k: "Condición de entrada", p: "Con déficit cero y sin emisión para financiar al Tesoro, la inflación baja y el dólar deja de tener varios precios. La brecha entre el dólar libre y el oficial pasó de 171% en noviembre de 2023 a cero.", c: "circ0", src: "Brecha entre el dólar blue y el oficial mayorista, promedio mensual. Fuentes: BCRA y Ámbito."},
+  {t: "Ahorro", k: "Mecanismo", p: "Cuando la moneda deja de perder valor, el ahorro vuelve a los bancos. Los depósitos privados en dólares casi se triplicaron desde diciembre de 2023: el dólar del colchón volvió al sistema.", c: "circ1", src: "Depósitos del sector privado, en miles de millones de dólares; los depósitos en pesos, convertidos a dólares. Fuente: <a href=\"https://www.bcra.gob.ar/consultas-personalizadas-de-series-estadisticas/\" target=\"_blank\" rel=\"noopener\">BCRA, series estadísticas</a>."},
+  {t: "Crédito", k: "Mecanismo", p: "Los depósitos se convierten en préstamos a plazos largos. Los bancos prestan el doble de lo que captan que a comienzos de 2024, y la hipoteca volvió a existir.", c: "circ2", src: "Préstamos y depósitos: <a href=\"https://www.bcra.gob.ar/consultas-personalizadas-de-series-estadisticas/\" target=\"_blank\" rel=\"noopener\">BCRA, series estadísticas</a>. Compraventas con hipoteca: <a href=\"https://www.colegio-escribanos.org.ar/category/estadisticas-de-escrituras/\" target=\"_blank\" rel=\"noopener\">Colegio de Escribanos de la Ciudad</a>."},
+  {t: "Inversión", k: "Mecanismo", p: "Con crédito y reglas estables se decide invertir. El Régimen de Incentivo para Grandes Inversiones ya aprobó 20 proyectos en nueve provincias. La Ciudad no tiene ninguno: su economía de servicios necesita su propia baja de impuestos.", c: "circ3", src: "Inversión comprometida en proyectos RIGI aprobados, en millones de dólares, por provincia. Fuente: <a href=\"https://www.argentina.gob.ar/economia/rigi\" target=\"_blank\" rel=\"noopener\">Ministerio de Economía, RIGI</a>."},
   {t: "Ingresos", k: "Retroalimentación", p: "La inversión puede generar empleo e ingresos que vuelven al ahorro. La pobreza en los 31 aglomerados bajó de 41,7% en el segundo semestre de 2023 a 28,2% en el de 2025, pero repuntó a 32,3% en el primero de 2026. El eslabón que controla la Ciudad es la inversión local.", c: "circ4", src: "Personas bajo las líneas de pobreza e indigencia, 31 aglomerados urbanos. INDEC, EPH, primer semestre de 2026."}
 ];
 
@@ -42,11 +41,12 @@ const bandOf = el => el.dataset.band ? el.dataset.band.split(",") : null;
 const CHARTS = {
   inflacion: el => lineChart(el, {
     series: [
-      {name: "Nación", role: "l", w: 2.8, values: SER.infl.map(r => [r[0], r[2]])},
-      {name: "Ciudad", role: "hi", w: 3.6, values: SER.infl.map(r => [r[0], r[1]])}
+      {name: "Nación", role: "l", w: 2.8, dots: false, values: SER.infl.map(r => [r[0], r[2]])},
+      {name: "Ciudad", role: "hi", w: 3.6, dots: false, values: SER.infl.map(r => [r[0], r[1]])}
     ],
-    y: {domain: [0, 27], ticks: [0, 5, 10, 15, 20, 25], fmt: pc0}, xTicks: "months", band: bandOf(el),
-    endFmt: pc1, tipFmt: pc1, endLabels: true, tipNote: d => govName(d),
+    y: {domain: [0, 27], ticks: [0, 5, 10, 15, 20, 25], fmt: pc0}, xTicks: yearTicks(1), band: bandOf(el),
+    endFmt: pc1, tipFmt: pc1, endLabels: true, endDot: false, tipNote: d => govName(d),
+    height: W => Math.max(360, Math.min(540, W * .58)),
     markers: [{d: "2022-08", label: "Asume Massa", short: "Massa"}, {d: "2023-12", label: "Asume Milei", short: "Milei"}],
     ann: [{d: "2023-12", v: 25.5, text: "25,5%", dx: 10, dy: 4, cls: "ann", hideNarrow: true}]
   }),
@@ -54,26 +54,26 @@ const CHARTS = {
     series: [{name: "Riesgo país", role: "l", w: 3, segs: [{until: "2019-12", role: "m"}, {until: "2023-12", role: "k"}, {role: "l"}], values: SER.rp, endName: "23-sep"}],
     y: {domain: [0, 4000], ticks: [0, 1000, 2000, 3000, 4000], fmt: f0},
     endFmt: v => f0(v), tipFmt: v => f0(v) + " pb", endLabels: true, xTicks: yearTicks(1), tipNote: d => govName(d),
-    markers: [{d: "2019-12", label: "Asume Fernández", short: "Fernández", anchor: "end"}, {d: "2023-12", label: "Asume Milei", short: "Milei"}],
-    ann: [{d: "2020-04", v: 3758, text: "Pandemia", dx: 12, dy: 4, hideNarrow: true}, {d: "2026-07", v: 420, text: "Mínimo: 402\nmediados de julio", dx: -8, dy: 44, anchor: "end", hideNarrow: true}]
+    markers: [{d: "2019-08", label: "Alberto gana las PASO", short: "PASO 2019", anchor: "end"}, {d: "2019-12", label: "Asume Fernández", short: "Fernández", top: 38}, {d: "2023-12", label: "Asume Milei", short: "Milei"}, {d: "2025-10", label: "LLA gana las elecciones intermedias", short: "LLA 2025", top: 64, anchor: "end"}],
+    ann: [{d: "2020-04", v: 3758, text: "Pandemia", dx: 12, dy: 4, hideNarrow: true}]
   }),
   m2: el => barChart(el, {
-    data: D.m2.map(([y, v]) => ({label: y === 2026 ? "2026*" : String(y), v, role: y === 2023 ? "neg" : y <= 2015 ? "k" : y <= 2019 ? "m" : y <= 2022 ? "k" : "l"})),
+    data: D.m2.map(([y, v]) => ({label: String(y), v, role: y === 2023 ? "neg" : y <= 2015 ? "k" : y <= 2019 ? "m" : y <= 2022 ? "k" : "l"})),
     values: (d, i, n) => !n || [0, 9, 12].includes(i), vfmt: (v, n) => n ? f0(v / 1000) + " mil" : f0(v),
     xlab: (d, i, n) => n ? (i % 2 === 0 || i === 12 ? "’" + d.label.slice(2) : "") : d.label,
     shade: {from: 6, to: 9, label: "Ley de Alquileres", short: "Ley 27.551", sub: "julio 2020 a diciembre 2023", subShort: "2020–2023"},
-    bracket: {from: 9, to: 12, text: "×5,7"}, tipFmt: v => f0(v) + " m²", tipLabel: d => "Junio de " + d.label.replace("*", ""), tipName: "Superficie"
+    bracket: {from: 9, to: 12, text: "×7,4"}, tipFmt: v => f0(v) + " m²", tipLabel: d => "Junio de " + d.label, tipName: "Superficie"
   }),
   alquiler: el => lineChart(el, {
     series: [{name: "Alquiler", role: "l", w: 3.2, segs: [{until: "2023-12", role: "k"}, {role: "l"}], values: SER.alqAgo, noEnd: true}],
-    y: {domain: [400000, 1050000], ticks: [400000, 600000, 800000, 1000000], fmt: v => f0(v / 1000) + " mil"},
-    tipFmt: v => "$ " + f0(Math.round(v / 1000) * 1000), m: {l: 58, r: 22, b: 50}, xTicks: "months",
+    y: {domain: [400000, 1600000], ticks: [400000, 800000, 1200000, 1600000], fmt: v => f0(v / 1000) + " mil"},
+    tipFmt: v => "$ " + f0(Math.round(v / 1000) * 1000), m: {l: 66, r: 22, b: 36}, xTicks: yearTicks(1),
     breakAxis: true, height: W => Math.max(300, Math.min(420, W * .62)),
     markers: [{d: "2023-12", label: "DNU 70/2023", short: "DNU"}],
     ann: [
-      {d: "2023-11", v: 908240 * K_AGO, text: "$ " + f0(Math.round(908240 * K_AGO / 1000) * 1000), dx: -6, dy: -14, anchor: "end"},
-      {d: "2026-06", v: 512380 * K_AGO, text: "$ " + f0(Math.round(512380 * K_AGO / 1000) * 1000) + "\njun-26", dx: 0, dy: -46, anchor: "end"},
-      {d: "2025-02", v: 740000, text: "−43,6%", cls: "ann", anchor: "middle", tone: "l"}
+      {d: "2023-11", v: 1453493, text: "$ 1.453.000", dx: -6, dy: -14, anchor: "end"},
+      {d: "2026-08", v: 811651, text: "$ 812.000\nago-26", dx: 0, dy: -46, anchor: "end"},
+      {d: "2025-02", v: 1090000, text: "−44,2%", cls: "ann", anchor: "middle", tone: "l"}
     ]
   }),
   usd: el => stackCols(el, {
@@ -84,8 +84,9 @@ const CHARTS = {
   hipProv: el => rankChart(el, {data: D.hipProv.map(([l, v]) => ({label: l, v, role: l === "CABA" ? "hi" : "ctx"})), fmt: v => f1(v), rowH: 24}),
   hipq: el => barChart(el, {
     data: SER.hipq.map(([y, q, v]) => ({label: q + " trim. " + y, v, role: gov(+y)})),
-    values: (d, i) => [0, 24, 49, 52].includes(i), vfmt: v => v + "%", max: 42, pad: .18, tipName: "Con hipoteca", tipExtra: d => govName(new Date(+d.label.slice(-4), 5, 1)),
-    groups: n => d3.range(2012, 2026).map((yr, k) => ({from: k * 4, to: Math.min(k * 4 + 3, 53), label: n ? (yr % 2 === 0 ? "’" + String(yr).slice(2) : "") : String(yr)})),
+    values: (d, i) => [0, 24, 49, 52, 57].includes(i), vfmt: v => f1(v) + "%", max: 42, pad: .18, tipName: "Con hipoteca", tipExtra: d => govName(new Date(+d.label.slice(-4), 5, 1)),
+    groups: n => d3.range(2012, 2027).map((yr, k) => ({from: k * 4, to: Math.min(k * 4 + 3, 57), label: yr % 2 === 0 ? (n ? "’" + String(yr).slice(2) : String(yr)) : ""})),
+    m: {l: 30, r: 30},
     height: W => Math.max(240, Math.min(320, W * .44))
   }),
   escr: el => barChart(el, {
@@ -93,7 +94,7 @@ const CHARTS = {
     values: (d, i, n) => !n ? [0, 8, 10, 14, 16].includes(i) : [8, 10, 16].includes(i),
     vfmt: (v, n) => n ? f1(v / 1000) + " mil" : f0(v),
     xlab: (d, i, n) => n ? (i % 4 === 0 || i === 16 ? "’" + d.label.slice(2) : "") : (i % 2 === 0 ? d.label : ""),
-    height: W => Math.max(240, Math.min(320, W * .44)), tipFmt: v => f0(v) + " escrituras", tipLabel: d => "Enero a abril de " + d.label, tipName: "Escrituras"
+    m: {l: 32, r: 32}, height: W => Math.max(240, Math.min(320, W * .44)), tipFmt: v => f0(v) + " escrituras", tipLabel: d => "Enero a agosto de " + d.label, tipName: "Escrituras"
   }),
   pob: el => rankChart(el, {data: D.pob.map(([l, v]) => ({label: l, v, role: l === "CABA" ? "hi" : "ctx"})), fmt: spc0}),
   ind: el => rankChart(el, {data: D.ind.map(([l, v]) => ({label: l, v, role: l === "CABA" ? "hi" : v > 0 ? "neg" : "ctx"})), fmt: spc0}),
@@ -201,7 +202,7 @@ const CHARTS = {
 /* ============ tablas de datos ============ */
 const TABLES = {
   inflacion: {cap: "Inflación mensual, en %", h: ["Mes", "Ciudad", "Nación"], rows: () => SER.infl.map(r => [mlabS(pd(r[0])), f1(r[1]), f1(r[2])])},
-  escr: {cap: "Escrituras de compraventa, enero a abril", h: ["Año", "Escrituras"], rows: () => D.escr.map(r => [r[0], f0(r[1])])},
+  escr: {cap: "Escrituras de compraventa, enero a agosto", h: ["Año", "Escrituras"], rows: () => D.escr.map(r => [r[0], f0(r[1])])},
   act: {cap: "Actividad, I trim. 2023 = 100", h: ["Serie", "I-23", "I-24", "I-25", "I-26"], rows: () => D.act.map(r => [r[0], ...r[2].map(f1)])},
   calle: {cap: "Personas en situación de calle", h: ["Relevamiento", "Centros de Inclusión", "Vía pública", "Total"], rows: () => D.calle.map(r => [mlabS(pd(r[0])), f0(r[1]), f0(r[2]), f0(r[1] + r[2])])},
   pgbSerie: {cap: "PGB porteño, millones de pesos de 2004", h: ["Año", "PGB", "Índice 2023 = 100", "Var. anual"], rows: () => D.pgb.map((r, i) => [r[0], f0(r[1]), f1(r[1] / 155183 * 100), i ? spc1((r[1] / D.pgb[i - 1][1] - 1) * 100) : "–"])},
